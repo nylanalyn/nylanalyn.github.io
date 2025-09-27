@@ -5,226 +5,321 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jeeves IRC Bot - Command Reference</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
         .command-card {
-            transition: all 0.3s ease-in-out;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .command-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        kbd {
+            background-color: #F3F4F6;
+            border-radius: 4px;
+            border: 1px solid #D1D5DB;
+            color: #111827;
+            display: inline-block;
+            font-size: 0.85em;
+            font-weight: 500;
+            line-height: 1;
+            padding: 0.2em 0.4em;
+            white-space: nowrap;
         }
     </style>
 </head>
-<body class="bg-gray-900 text-gray-200">
+<body class="bg-gray-50 text-gray-800">
 
-    <div class="container mx-auto p-4 md:p-8">
-
-        <header class="text-center mb-10">
-            <h1 class="text-4xl md:text-5xl font-bold text-white mb-2">Jeeves IRC Bot</h1>
-            <p class="text-lg text-indigo-400">Command & Module Reference</p>
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-900">Jeeves Command Reference</h1>
+            <p class="text-lg text-gray-600 mt-2">A comprehensive guide to all available commands and features.</p>
         </header>
 
-        <!-- Search Bar -->
         <div class="mb-8 sticky top-4 z-10">
-            <input type="text" id="searchInput" placeholder="Search for a command or module..." class="w-full p-4 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
+            <input type="text" id="searchInput" onkeyup="filterCommands()" placeholder="Search for commands..."
+                   class="w-full p-4 text-lg border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition shadow-sm">
         </div>
 
-        <div id="command-container" class="space-y-12">
+        <main id="command-container">
 
-            <!-- User Commands Section -->
-            <div>
-                <h2 class="text-3xl font-bold text-white border-b-2 border-indigo-500 pb-2 mb-6">User & Utility Commands</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    
-                    <div class="command-card bg-gray-800 p-6 rounded-lg border border-gray-700" data-module="courtesy">
-                        <h3 class="text-2xl font-semibold text-white mb-4">Courtesy</h3>
-                        <p class="text-gray-400 mb-4">Manages user profiles, pronouns, and titles.</p>
-                        <ul class="space-y-3 text-gray-300">
-                            <li><strong>!gender &lt;identity&gt;</strong> - Set your preferred title (e.g., sir, madam, neutral).</li>
-                            <li><strong>!pronouns &lt;pronouns&gt;</strong> - Set your pronouns (e.g., she/her, they/them).</li>
-                            <li><strong>!whoami</strong> - Display your current profile settings.</li>
-                            <li><strong>!profile &lt;user&gt;</strong> - Display another user's profile.</li>
-                            <li><strong>!forgetme</strong> - Delete your courtesy profile.</li>
-                        </ul>
+            <!-- Core Control & Admin Commands -->
+            <section class="mb-12 command-category">
+                <h2 class="text-3xl font-semibold border-b-2 border-indigo-500 pb-2 mb-6">Core Control & Admin Commands</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!admin help</kbd></h3>
+                        <p class="text-gray-600">Sends a private message with a list of all administrative commands.</p>
                     </div>
-
-                    <div class="command-card bg-gray-800 p-6 rounded-lg border border-gray-700" data-module="convenience">
-                        <h3 class="text-2xl font-semibold text-white mb-4">Convenience</h3>
-                        <p class="text-gray-400 mb-4">Quick search commands for various services.</p>
-                        <ul class="space-y-3 text-gray-300">
-                            <li><strong>!g &lt;query&gt;</strong> - Perform a Google search.</li>
-                            <li><strong>!yt &lt;query&gt;</strong> - Search YouTube for a video.</li>
-                            <li><strong>!wiki &lt;query&gt;</strong> - Search Wikipedia for an article.</li>
-                            <li><strong>!ud &lt;term&gt;</strong> - Look up a term on Urban Dictionary.</li>
-                            <li><strong>!news</strong> - Fetch top news headlines for your location.</li>
-                        </ul>
+                    <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!admin reload</kbd></h3>
+                        <p class="text-gray-600">Reloads all modules from the disk, applying any code changes.</p>
                     </div>
-                    
-                    <div class="command-card bg-gray-800 p-6 rounded-lg border border-gray-700" data-module="clock weather">
-                        <h3 class="text-2xl font-semibold text-white mb-4">Location & Time</h3>
-                        <p class="text-gray-400 mb-4">Provides weather and time based on location.</p>
-                        <ul class="space-y-3 text-gray-300">
-                            <li><strong>!location &lt;city, country&gt;</strong> - Set your default location.</li>
-                            <li><strong>!weather</strong> - Get weather for your default location.</li>
-                            <li><strong>!weather &lt;location/user&gt;</strong> - Get weather for a specific place or user.</li>
-                            <li><strong>!time</strong> - Get the local time for your location.</li>
-                            <li><strong>!time &lt;location/user&gt;</strong> - Get the time for a specific place or user.</li>
-                        </ul>
+                     <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!admin load &lt;module&gt;</kbd></h3>
+                        <p class="text-gray-600">Loads a module into memory by its name (e.g., <kbd>quest</kbd>).</p>
                     </div>
-
-                    <div class="command-card bg-gray-800 p-6 rounded-lg border border-gray-700" data-module="help intro memos">
-                        <h3 class="text-2xl font-semibold text-white mb-4">General Bot</h3>
-                        <p class="text-gray-400 mb-4">Core bot interaction commands.</p>
-                        <ul class="space-y-3 text-gray-300">
-                            <li><strong>!help</strong> - Receive a private message with all commands.</li>
-                            <li><strong>!help &lt;command&gt;</strong> - Get detailed help for a specific command.</li>
-                            <li><strong>!intro</strong> - A one-time introduction to the bot's services.</li>
-                            <li><strong>!memo &lt;user&gt; &lt;message&gt;</strong> - Leave a message for a user.</li>
-                            <li><strong>!memos mine</strong> - Check messages left for you.</li>
-                        </ul>
+                    <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!admin unload &lt;module&gt;</kbd></h3>
+                        <p class="text-gray-600">Unloads a module from memory.</p>
                     </div>
-
-                    <div class="command-card bg-gray-800 p-6 rounded-lg border border-gray-700" data-module="shorten translate">
-                        <h3 class="text-2xl font-semibold text-white mb-4">Text Utilities</h3>
-                        <p class="text-gray-400 mb-4">Tools for text and link manipulation.</p>
-                        <ul class="space-y-3 text-gray-300">
-                            <li><strong>!shorten &lt;url&gt;</strong> - Shorten a long URL.</li>
-                            <li><strong>!translate &lt;text&gt;</strong> - Translate text to English.</li>
-                            <li><strong>!translate &lt;lang_code&gt; &lt;text&gt;</strong> - Translate text to a specific language.</li>
-                            <li><strong>!translate langs</strong> - Get a link to supported language codes.</li>
-                        </ul>
+                    <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!admin config reload</kbd></h3>
+                        <p class="text-gray-600">Reloads the bot's configuration from its memory (`state.json`).</p>
+                    </div>
+                    <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!admin modules</kbd></h3>
+                        <p class="text-gray-600">Lists all modules currently loaded into the bot's memory.</p>
+                    </div>
+                     <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!admin addadmin &lt;nick&gt;</kbd></h3>
+                        <p class="text-gray-600">Adds a user to the bot's administrator list at runtime.</p>
+                    </div>
+                    <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!admin deladmin &lt;nick&gt;</kbd></h3>
+                        <p class="text-gray-600">Removes a user from the bot's administrator list.</p>
+                    </div>
+                    <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!admin blacklist &lt;module.py&gt;</kbd></h3>
+                        <p class="text-gray-600">Adds a module to the runtime blacklist and unloads it.</p>
+                    </div>
+                    <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!admin unblacklist &lt;module.py&gt;</kbd></h3>
+                        <p class="text-gray-600">Removes a module from the runtime blacklist.</p>
+                    </div>
+                    <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!admin on|off &lt;module&gt; [#channel]</kbd></h3>
+                        <p class="text-gray-600">Enables or disables a loaded module for a specific channel (or the current one).</p>
+                    </div>
+                    <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!admin get &lt;path&gt; [#channel]</kbd></h3>
+                        <p class="text-gray-600">Retrieves a configuration value. Use dot notation, e.g., <kbd>quest.cooldown_seconds</kbd>.</p>
+                    </div>
+                    <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!admin set &lt;path&gt; &lt;value&gt; [scope]</kbd></h3>
+                        <p class="text-gray-600">Sets a config value. Scope can be <kbd>#channel</kbd> or <kbd>global</kbd>. E.g., <kbd>!admin set quest.cooldown_seconds 600</kbd>.</p>
+                    </div>
+                    <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!admin save</kbd></h3>
+                        <p class="text-gray-600">Saves the current running configuration to <kbd>config/config.yaml.saved</kbd>.</p>
+                    </div>
+                    <div class="command-card bg-rose-50 p-6 rounded-lg shadow border-l-4 border-rose-500">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!admin reset</kbd></h3>
+                        <p class="text-gray-600"><strong>DANGEROUS:</strong> Discards all runtime changes and reloads the original <kbd>config.yaml</kbd>.</p>
+                    </div>
+                    <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!admin debug on|off</kbd></h3>
+                        <p class="text-gray-600">Toggles verbose logging to the <kbd>debug.log</kbd> file.</p>
+                    </div>
+                    <div class="command-card bg-rose-50 p-6 rounded-lg shadow border-l-4 border-rose-500">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!emergency quit [message]</kbd></h3>
+                        <p class="text-gray-600">Forces the bot to disconnect from the server immediately.</p>
                     </div>
                 </div>
-            </div>
-
-            <!-- Fun & Games Section -->
-            <div>
-                <h2 class="text-3xl font-bold text-white border-b-2 border-indigo-500 pb-2 mb-6">Fun & Games</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div class="command-card bg-gray-800 p-6 rounded-lg border border-gray-700" data-module="quest">
-                        <h3 class="text-2xl font-semibold text-white mb-4">Quest</h3>
-                        <p class="text-gray-400 mb-4">A persistent RPG-style questing game.</p>
-                        <ul class="space-y-3 text-gray-300">
-                            <li><strong>!quest [difficulty]</strong> - Embark on a solo quest (easy, normal, hard).</li>
-                            <li><strong>!quest profile [user]</strong> - View your or another user's quest profile.</li>
-                            <li><strong>!quest story</strong> - Get a piece of world lore and your last fight result.</li>
-                            <li><strong>!quest class &lt;class_name&gt;</strong> - Choose a character class.</li>
-                            <li><strong>!mob</strong> - Start a group boss fight.</li>
-                            <li><strong>!join</strong> - Join an active group boss fight.</li>
-                        </ul>
+            </section>
+            
+            <!-- User Profile & Courtesy Commands -->
+            <section class="mb-12 command-category">
+                <h2 class="text-3xl font-semibold border-b-2 border-indigo-500 pb-2 mb-6">User Profile & Courtesy</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!gender &lt;identity&gt;</kbd></h3>
+                        <p class="text-gray-600">Sets your preferred title (Sir/Madam/Neutral). Accepts terms like "male", "female", "nonbinary", etc.</p>
                     </div>
-                    <div class="command-card bg-gray-800 p-6 rounded-lg border border-gray-700" data-module="hunt">
-                        <h3 class="text-2xl font-semibold text-white mb-4">Hunt</h3>
-                        <p class="text-gray-400 mb-4">A game of catching animals that randomly appear.</p>
-                        <ul class="space-y-3 text-gray-300">
-                            <li><strong>!hunt</strong> - Hunt the currently active animal.</li>
-                            <li><strong>!hug</strong> - Befriend the currently active animal.</li>
-                            <li><strong>!release &lt;hunt|hug&gt;</strong> - Release a previously captured animal.</li>
-                            <li><strong>!hunt score [user]</strong> - Check your or another user's score.</li>
-                            <li><strong>!hunt top</strong> - Show the leaderboard.</li>
-                        </ul>
+                    <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!pronouns &lt;pronouns&gt;</kbd></h3>
+                        <p class="text-gray-600">Sets your preferred pronouns (e.g., <kbd>he/him</kbd>, <kbd>she/her</kbd>, <kbd>they/them</kbd>).</p>
                     </div>
-                    <div class="command-card bg-gray-800 p-6 rounded-lg border border-gray-700" data-module="adventure">
-                        <h3 class="text-2xl font-semibold text-white mb-4">Adventure</h3>
-                        <p class="text-gray-400 mb-4">A channel-wide choose-your-own-adventure game.</p>
-                        <ul class="space-y-3 text-gray-300">
-                            <li><strong>!adventure</strong> - Start a new adventure or see the status.</li>
-                            <li><strong>1</strong> or <strong>2</strong> - Vote on the current adventure choice.</li>
-                            <li><strong>!adventure last</strong> - See the result of the last adventure.</li>
-                            <li><strong>!items [user]</strong> - See cosmetic items found on adventures.</li>
-                        </ul>
+                    <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!location &lt;city, country&gt;</kbd></h3>
+                        <p class="text-gray-600">Sets your geographical location for modules like Weather and Clock.</p>
                     </div>
-                    <div class="command-card bg-gray-800 p-6 rounded-lg border border-gray-700" data-module="bell">
-                        <h3 class="text-2xl font-semibold text-white mb-4">Bell</h3>
-                        <p class="text-gray-400 mb-4">A reaction game to answer a service bell.</p>
-                        <ul class="space-y-3 text-gray-300">
-                            <li><strong>!answer</strong> - Answer the bell when it rings to score a point.</li>
-                            <li><strong>!bell score</strong> - Check your personal score.</li>
-                            <li><strong>!bell top</strong> - Show the top 5 most attentive users.</li>
-                        </ul>
+                    <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!whoami / !profile [user]</kbd></h3>
+                        <p class="text-gray-600">Displays the stored preferences for yourself or another user.</p>
                     </div>
-                    <div class="command-card bg-gray-800 p-6 rounded-lg border border-gray-700" data-module="fortune gif coffee">
-                        <h3 class="text-2xl font-semibold text-white mb-4">Amusements</h3>
-                        <p class="text-gray-400 mb-4">Miscellaneous fun and flavor commands.</p>
-                        <ul class="space-y-3 text-gray-300">
-                            <li><strong>!fortune [category]</strong> - Get a fortune (happy, sad, silly, spooky).</li>
-                            <li><strong>!gif &lt;query&gt;</strong> - Find a GIF on Giphy.</li>
-                            <li><strong>!coffee</strong> - Request a time-appropriate beverage.</li>
-                            <li><strong>!pron</strong> - Receive a wholesome, helpful scenario.</li>
-                            <li><strong>!calc &lt;expression&gt;</strong> - Perform a mathematical calculation.</li>
-                        </ul>
+                     <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!ignore [user]</kbd></h3>
+                        <p class="text-gray-600">Makes the bot ignore you. Admins can specify a user to ignore.</p>
+                    </div>
+                    <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!unignore [user]</kbd></h3>
+                        <p class="text-gray-600">Makes the bot stop ignoring you. Admins can unignore others.</p>
                     </div>
                 </div>
-            </div>
-
-            <!-- Admin Commands Section -->
-            <div>
-                <h2 class="text-3xl font-bold text-white border-b-2 border-red-500 pb-2 mb-6">Administrative Commands</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div class="command-card bg-gray-800 p-6 rounded-lg border border-gray-700" data-module="admin">
-                        <h3 class="text-2xl font-semibold text-white mb-4">Core Control</h3>
-                        <p class="text-gray-400 mb-4">Essential bot management commands.</p>
-                        <ul class="space-y-3 text-gray-300">
-                            <li><strong>!admin reload</strong> - Reload all modules from disk.</li>
-                            <li><strong>!admin config reload</strong> - Reload the config from the bot's memory (state).</li>
-                            <li><strong>!admin modules</strong> - List all currently loaded modules.</li>
-                            <li><strong>!admin addadmin &lt;user&gt;</strong> - Adds a user to the admin list.</li>
-                            <li><strong>!admin deladmin &lt;user&gt;</strong> - Removes a user from the admin list.</li>
-                            <li><strong>!admin debug &lt;on|off&gt;</strong> - Toggle verbose logging to `debug.log`.</li>
-                            <li><strong>!emergency quit [msg]</strong> - Immediately shut down the bot.</li>
-                        </ul>
+            </section>
+            
+            <!-- Fun & Games Commands -->
+            <section class="mb-12 command-category">
+                <h2 class="text-3xl font-semibold border-b-2 border-indigo-500 pb-2 mb-6">Fun & Games</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!quest [difficulty]</kbd></h3>
+                        <p class="text-gray-600">Embark on a solo RPG quest. Difficulty can be <kbd>easy</kbd>, <kbd>normal</kbd>, or <kbd>hard</kbd>.</p>
                     </div>
-                    <div class="command-card bg-gray-800 p-6 rounded-lg border border-gray-700" data-module="admin config">
-                        <h3 class="text-2xl font-semibold text-white mb-4">Configuration Management</h3>
-                        <p class="text-gray-400 mb-4">Dynamically change bot settings at runtime.</p>
-                        <ul class="space-y-3 text-gray-300">
-                            <li><strong>!admin on &lt;module&gt; [#channel]</strong> - Enable a module for a channel.</li>
-                            <li><strong>!admin off &lt;module&gt; [#channel]</strong> - Disable a module for a channel.</li>
-                            <li><strong>!admin get &lt;module.path&gt; [#channel]</strong> - Get a config value.</li>
-                            <li><strong>!admin set &lt;module.path&gt; &lt;value&gt; [#channel|global]</strong> - Set a config value.</li>
-                            <li><strong>!admin save</strong> - Writes the current running config to `config.yaml.saved`.</li>
-                            <li><strong>!admin reset</strong> - <span class="text-red-400 font-semibold">DANGEROUS:</span> Reloads config from the original `config.yaml`, discarding all runtime changes.</li>
-                        </ul>
+                     <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!quest profile [user]</kbd></h3>
+                        <p class="text-gray-600">View your or another player's Quest profile (Level, XP, Class).</p>
                     </div>
-                    <div class="command-card bg-gray-800 p-6 rounded-lg border border-gray-700" data-module="admin channel">
-                        <h3 class="text-2xl font-semibold text-white mb-4">Channel & Communication</h3>
-                        <p class="text-gray-400 mb-4">Commands for managing channels and speech.</p>
-                        <ul class="space-y-3 text-gray-300">
-                            <li><strong>!admin join &lt;#channel&gt;</strong> - Make the bot join a new channel.</li>
-                            <li><strong>!admin part &lt;#channel&gt; [msg]</strong> - Make the bot leave a channel.</li>
-                            <li><strong>!say [#channel] &lt;message&gt;</strong> - Make the bot say something in the current or a specified channel.</li>
-                        </ul>
+                    <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!hunt / !hug</kbd></h3>
+                        <p class="text-gray-600">Hunt or hug a creature that randomly appears in the channel.</p>
+                    </div>
+                    <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!hunt score [user]</kbd></h3>
+                        <p class="text-gray-600">Displays your or another user's hunting and hugging scores.</p>
+                    </div>
+                     <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!adventure</kbd></h3>
+                        <p class="text-gray-600">Starts a choose-your-own-adventure where the channel votes on the destination.</p>
+                    </div>
+                     <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!items [user]</kbd></h3>
+                        <p class="text-gray-600">Shows the peculiar items you or another user have collected from adventures.</p>
+                    </div>
+                     <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!answer</kbd></h3>
+                        <p class="text-gray-600">Answer the service bell when it randomly rings in the channel to score points.</p>
+                    </div>
+                     <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!bell score</kbd></h3>
+                        <p class="text-gray-600">Check how many times you've answered the service bell.</p>
+                    </div>
+                    <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!fortune [category]</kbd></h3>
+                        <p class="text-gray-600">Receive a fortune. Optional categories: <kbd>happy</kbd>, <kbd>sad</kbd>, <kbd>silly</kbd>, <kbd>spooky</kbd>.</p>
+                    </div>
+                    <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!coffee</kbd></h3>
+                        <p class="text-gray-600">Serves a beverage appropriate to your local time of day.</p>
+                    </div>
+                    <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!calc &lt;expression&gt;</kbd></h3>
+                        <p class="text-gray-600">Performs a mathematical calculation (with occasional whimsical errors).</p>
+                    </div>
+                     <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!pron</kbd></h3>
+                        <p class="text-gray-600">Provides a wholesome, helpful scenario with a suggestive trigger.</p>
                     </div>
                 </div>
-            </div>
+            </section>
 
-        </div>
-
+            <!-- Utility & Information Commands -->
+            <section class="mb-12 command-category">
+                <h2 class="text-3xl font-semibold border-b-2 border-indigo-500 pb-2 mb-6">Utility & Information</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!help [command]</kbd></h3>
+                        <p class="text-gray-600">Sends a private message with a list of commands, or details for a specific command.</p>
+                    </div>
+                    <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!weather [location/user]</kbd></h3>
+                        <p class="text-gray-600">Gets the weather for your set location, or a specified location/user.</p>
+                    </div>
+                    <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!time [location/user]</kbd></h3>
+                        <p class="text-gray-600">Gets the local time for your set location, or a specified location/user.</p>
+                    </div>
+                    <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!g &lt;query&gt;</kbd></h3>
+                        <p class="text-gray-600">Performs a Google search.</p>
+                    </div>
+                    <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!yt &lt;query&gt;</kbd></h3>
+                        <p class="text-gray-600">Searches YouTube for a video.</p>
+                    </div>
+                    <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!ud &lt;term&gt;</kbd></h3>
+                        <p class="text-gray-600">Looks up a term on Urban Dictionary.</p>
+                    </div>
+                    <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!wiki &lt;query&gt;</kbd></h3>
+                        <p class="text-gray-600">Searches Wikipedia for an article.</p>
+                    </div>
+                    <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!news</kbd></h3>
+                        <p class="text-gray-600">Fetches the top news story for your set location.</p>
+                    </div>
+                    <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!tr [lang] &lt;text&gt;</kbd></h3>
+                        <p class="text-gray-600">Translates text. If no language code is given, it defaults to English.</p>
+                    </div>
+                    <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!memo &lt;user&gt; &lt;message&gt;</kbd></h3>
+                        <p class="text-gray-600">Leaves a message for a user that will be delivered when they next speak.</p>
+                    </div>
+                     <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!shorten &lt;url&gt;</kbd></h3>
+                        <p class="text-gray-600">Shortens a long URL.</p>
+                    </div>
+                     <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2"><kbd>!gif &lt;query&gt;</kbd></h3>
+                        <p class="text-gray-600">Finds a GIF on Giphy that matches the query.</p>
+                    </div>
+                </div>
+            </section>
+            
+             <!-- Passive & Ambient Features -->
+            <section class="mb-12 command-category">
+                <h2 class="text-3xl font-semibold border-b-2 border-indigo-500 pb-2 mb-6">Passive & Ambient Features</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2">Natural Language</h3>
+                        <p class="text-gray-600">Responds to natural questions like "Jeeves, what's the weather?" or "Jeeves, what is 2+2?". Also responds to flirtatious comments and greetings.</p>
+                    </div>
+                    <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2">URL Title Announcer</h3>
+                        <p class="text-gray-600">Automatically fetches and announces the title of most URLs posted in the chat, including details for YouTube videos.</p>
+                    </div>
+                    <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2">Sed Corrections</h3>
+                        <p class="text-gray-600">Correct typos in your last message by using sed-style replacement: <kbd>s/mistake/correction/</kbd>.</p>
+                    </div>
+                    <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2">Random Chatter</h3>
+                        <p class="text-gray-600">Periodically posts daily and weekly observations or comments based on channel conversation topics.</p>
+                    </div>
+                     <div class="command-card bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl mb-2">Roadtrips</h3>
+                        <p class="text-gray-600">Will occasionally offer to take the channel on a spontaneous roadtrip, a mini-adventure where users can RSVP.</p>
+                    </div>
+                </div>
+            </section>
+            
+        </main>
     </div>
 
     <script>
-        const searchInput = document.getElementById('searchInput');
-        const commandContainer = document.getElementById('command-container');
-        const commandCards = commandContainer.querySelectorAll('.command-card');
+        function filterCommands() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toUpperCase();
+            const container = document.getElementById('command-container');
+            const categories = container.getElementsByClassName('command-category');
 
-        searchInput.addEventListener('input', (e) => {
-            const searchTerm = e.target.value.toLowerCase().trim();
-
-            commandCards.forEach(card => {
-                const moduleName = card.dataset.module || '';
-                const cardText = card.textContent.toLowerCase();
-
-                if (cardText.includes(searchTerm)) {
-                    card.style.display = '';
-                    card.style.opacity = '1';
-                } else {
-                    card.style.display = 'none';
-                    card.style.opacity = '0';
+            for (let i = 0; i < categories.length; i++) {
+                const cards = categories[i].getElementsByClassName('command-card');
+                let categoryVisible = false;
+                for (let j = 0; j < cards.length; j++) {
+                    const kbd = cards[j].getElementsByTagName("kbd")[0];
+                    const p = cards[j].getElementsByTagName("p")[0];
+                    if (kbd || p) {
+                        const txtValue = (kbd ? kbd.textContent || kbd.innerText : '') + ' ' + (p ? p.textContent || p.innerText : '');
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            cards[j].style.display = "";
+                            categoryVisible = true;
+                        } else {
+                            cards[j].style.display = "none";
+                        }
+                    }
                 }
-            });
-        });
+                if (categoryVisible) {
+                    categories[i].style.display = "";
+                } else {
+                    categories[i].style.display = "none";
+                }
+            }
+        }
     </script>
 
 </body>
