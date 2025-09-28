@@ -8,12 +8,21 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; }
-        .command-card {
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        .command-card-header {
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
         }
-        .command-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        .command-card-header:hover {
+            background-color: #f9fafb;
+        }
+        .details-panel {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-in-out;
+            background-color: #f9fafb;
+        }
+        .details-panel.open {
+            max-height: 1000px; /* Adjust as needed */
         }
         kbd {
             background-color: #F3F4F6;
@@ -26,6 +35,12 @@
             line-height: 1;
             padding: 0.2em 0.4em;
             white-space: nowrap;
+        }
+        .chevron {
+            transition: transform 0.3s ease-in-out;
+        }
+        .chevron.open {
+            transform: rotate(90deg);
         }
     </style>
 </head>
@@ -47,105 +62,91 @@
             <!-- Core Control & Admin Commands -->
             <section class="mb-12 command-category">
                 <h2 class="text-3xl font-semibold border-b-2 border-indigo-500 pb-2 mb-6">Core Control & Admin Commands</h2>
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!admin help</kbd></h3>
-                        <p class="text-gray-600">Sends a private message with a list of all administrative commands.</p>
+                <div class="space-y-4">
+                    
+                    <div class="command-group bg-white rounded-lg shadow overflow-hidden">
+                        <div class="command-card-header p-6 flex justify-between items-center" onclick="toggleDetails(this)">
+                            <div>
+                                <h3 class="font-bold text-xl mb-1"><kbd>!admin &lt;sub-command&gt;</kbd></h3>
+                                <p class="text-gray-600">The main command for all administrative functions.</p>
+                            </div>
+                            <svg class="chevron w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </div>
+                        <div class="details-panel">
+                            <div class="p-6 border-t border-gray-200 space-y-4">
+                                <p><kbd>!admin help</kbd> - Sends a private message with a list of all administrative commands.</p>
+                                <p><kbd>!admin reload</kbd> - Reloads all modules from the disk, applying any code changes.</p>
+                                <p><kbd>!admin load &lt;module&gt;</kbd> - Loads a module into memory by its name (e.g., <kbd>quest</kbd>).</p>
+                                <p><kbd>!admin unload &lt;module&gt;</kbd> - Unloads a module from memory.</p>
+                                <p><kbd>!admin config reload</kbd> - Reloads the bot's configuration from its memory (`state.json`).</p>
+                                <p><kbd>!admin modules</kbd> - Lists all modules currently loaded into the bot's memory.</p>
+                                <p><kbd>!admin addadmin &lt;nick&gt;</kbd> - Adds a user to the bot's administrator list at runtime.</p>
+                                <p><kbd>!admin deladmin &lt;nick&gt;</kbd> - Removes a user from the bot's administrator list.</p>
+                                <p><kbd>!admin blacklist &lt;module.py&gt;</kbd> - Adds a module to the runtime blacklist and unloads it.</p>
+                                <p><kbd>!admin unblacklist &lt;module.py&gt;</kbd> - Removes a module from the runtime blacklist.</p>
+                                <p><kbd>!admin on|off &lt;module&gt; [#channel]</kbd> - Enables or disables a loaded module for a specific channel.</p>
+                                <p><kbd>!admin get &lt;path&gt; [#channel]</kbd> - Retrieves a configuration value. Use dot notation, e.g., <kbd>quest.cooldown_seconds</kbd>.</p>
+                                <p><kbd>!admin set &lt;path&gt; &lt;value&gt; [scope]</kbd> - Sets a config value. Scope can be <kbd>#channel</kbd> or <kbd>global</kbd>.</p>
+                                <p><kbd>!admin save</kbd> - Saves the current running configuration to <kbd>config/config.yaml.saved</kbd>.</p>
+                                <p><kbd>!admin debug on|off</kbd> - Toggles verbose logging to the <kbd>debug.log</kbd> file.</p>
+                                <p class="text-rose-700"><kbd>!admin reset</kbd> - <strong>DANGEROUS:</strong> Discards all runtime changes and reloads the original <kbd>config.yaml</kbd>.</p>
+                                <p class="text-rose-700"><kbd>!emergency quit [message]</kbd> - Forces the bot to disconnect from the server immediately.</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!admin reload</kbd></h3>
-                        <p class="text-gray-600">Reloads all modules from the disk, applying any code changes.</p>
-                    </div>
-                     <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!admin load &lt;module&gt;</kbd></h3>
-                        <p class="text-gray-600">Loads a module into memory by its name (e.g., <kbd>quest</kbd>).</p>
-                    </div>
-                    <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!admin unload &lt;module&gt;</kbd></h3>
-                        <p class="text-gray-600">Unloads a module from memory.</p>
-                    </div>
-                    <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!admin config reload</kbd></h3>
-                        <p class="text-gray-600">Reloads the bot's configuration from its memory (`state.json`).</p>
-                    </div>
-                    <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!admin modules</kbd></h3>
-                        <p class="text-gray-600">Lists all modules currently loaded into the bot's memory.</p>
-                    </div>
-                     <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!admin addadmin &lt;nick&gt;</kbd></h3>
-                        <p class="text-gray-600">Adds a user to the bot's administrator list at runtime.</p>
-                    </div>
-                    <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!admin deladmin &lt;nick&gt;</kbd></h3>
-                        <p class="text-gray-600">Removes a user from the bot's administrator list.</p>
-                    </div>
-                    <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!admin blacklist &lt;module.py&gt;</kbd></h3>
-                        <p class="text-gray-600">Adds a module to the runtime blacklist and unloads it.</p>
-                    </div>
-                    <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!admin unblacklist &lt;module.py&gt;</kbd></h3>
-                        <p class="text-gray-600">Removes a module from the runtime blacklist.</p>
-                    </div>
-                    <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!admin on|off &lt;module&gt; [#channel]</kbd></h3>
-                        <p class="text-gray-600">Enables or disables a loaded module for a specific channel (or the current one).</p>
-                    </div>
-                    <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!admin get &lt;path&gt; [#channel]</kbd></h3>
-                        <p class="text-gray-600">Retrieves a configuration value. Use dot notation, e.g., <kbd>quest.cooldown_seconds</kbd>.</p>
-                    </div>
-                    <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!admin set &lt;path&gt; &lt;value&gt; [scope]</kbd></h3>
-                        <p class="text-gray-600">Sets a config value. Scope can be <kbd>#channel</kbd> or <kbd>global</kbd>. E.g., <kbd>!admin set quest.cooldown_seconds 600</kbd>.</p>
-                    </div>
-                    <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!admin save</kbd></h3>
-                        <p class="text-gray-600">Saves the current running configuration to <kbd>config/config.yaml.saved</kbd>.</p>
-                    </div>
-                    <div class="command-card bg-rose-50 p-6 rounded-lg shadow border-l-4 border-rose-500">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!admin reset</kbd></h3>
-                        <p class="text-gray-600"><strong>DANGEROUS:</strong> Discards all runtime changes and reloads the original <kbd>config.yaml</kbd>.</p>
-                    </div>
-                    <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!admin debug on|off</kbd></h3>
-                        <p class="text-gray-600">Toggles verbose logging to the <kbd>debug.log</kbd> file.</p>
-                    </div>
-                    <div class="command-card bg-rose-50 p-6 rounded-lg shadow border-l-4 border-rose-500">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!emergency quit [message]</kbd></h3>
-                        <p class="text-gray-600">Forces the bot to disconnect from the server immediately.</p>
-                    </div>
+
                 </div>
             </section>
             
             <!-- User Profile & Courtesy Commands -->
             <section class="mb-12 command-category">
                 <h2 class="text-3xl font-semibold border-b-2 border-indigo-500 pb-2 mb-6">User Profile & Courtesy</h2>
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!gender &lt;identity&gt;</kbd></h3>
+                <div class="space-y-4">
+                    <div class="command-group bg-white rounded-lg shadow p-6">
+                        <h3 class="font-bold text-xl mb-1"><kbd>!gender &lt;identity&gt;</kbd></h3>
                         <p class="text-gray-600">Sets your preferred title (Sir/Madam/Neutral). Accepts terms like "male", "female", "nonbinary", etc.</p>
                     </div>
-                    <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!pronouns &lt;pronouns&gt;</kbd></h3>
+                    <div class="command-group bg-white rounded-lg shadow p-6">
+                        <h3 class="font-bold text-xl mb-1"><kbd>!pronouns &lt;pronouns&gt;</kbd></h3>
                         <p class="text-gray-600">Sets your preferred pronouns (e.g., <kbd>he/him</kbd>, <kbd>she/her</kbd>, <kbd>they/them</kbd>).</p>
                     </div>
-                    <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!location &lt;city, country&gt;</kbd></h3>
+                    <div class="command-group bg-white rounded-lg shadow p-6">
+                        <h3 class="font-bold text-xl mb-1"><kbd>!location &lt;city, country&gt;</kbd></h3>
                         <p class="text-gray-600">Sets your geographical location for modules like Weather and Clock.</p>
                     </div>
-                    <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!whoami / !profile [user]</kbd></h3>
-                        <p class="text-gray-600">Displays the stored preferences for yourself or another user.</p>
+                    <div class="command-group bg-white rounded-lg shadow p-6">
+                        <h3 class="font-bold text-xl mb-1"><kbd>!remind &lt;me/user&gt; &lt;timeframe&gt; &lt;message&gt;</kbd></h3>
+                        <p class="text-gray-600">Sets a reminder. Timeframe is e.g., <kbd>in 10 minutes</kbd>, <kbd>in 2 hours</kbd>.</p>
                     </div>
-                     <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!ignore [user]</kbd></h3>
-                        <p class="text-gray-600">Makes the bot ignore you. Admins can specify a user to ignore.</p>
+                     <div class="command-group bg-white rounded-lg shadow overflow-hidden">
+                        <div class="command-card-header p-6 flex justify-between items-center" onclick="toggleDetails(this)">
+                             <div>
+                                <h3 class="font-bold text-xl mb-1"><kbd>!whoami / !profile</kbd></h3>
+                                <p class="text-gray-600">Displays stored preferences.</p>
+                            </div>
+                            <svg class="chevron w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </div>
+                        <div class="details-panel">
+                            <div class="p-6 border-t border-gray-200 space-y-4">
+                                <p><kbd>!whoami</kbd> - Displays your own stored preferences.</p>
+                                <p><kbd>!profile [user]</kbd> - Displays the preferences for another user.</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!unignore [user]</kbd></h3>
-                        <p class="text-gray-600">Makes the bot stop ignoring you. Admins can unignore others.</p>
+                    <div class="command-group bg-white rounded-lg shadow overflow-hidden">
+                        <div class="command-card-header p-6 flex justify-between items-center" onclick="toggleDetails(this)">
+                             <div>
+                                <h3 class="font-bold text-xl mb-1"><kbd>!ignore / !unignore</kbd></h3>
+                                <p class="text-gray-600">Manage the bot's ignore list.</p>
+                            </div>
+                            <svg class="chevron w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </div>
+                        <div class="details-panel">
+                            <div class="p-6 border-t border-gray-200 space-y-4">
+                                <p><kbd>!ignore [user]</kbd> - Makes the bot ignore you. Admins can specify a user to ignore.</p>
+                                <p><kbd>!unignore [user]</kbd> - Makes the bot stop ignoring you. Admins can unignore others.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -153,53 +154,82 @@
             <!-- Fun & Games Commands -->
             <section class="mb-12 command-category">
                 <h2 class="text-3xl font-semibold border-b-2 border-indigo-500 pb-2 mb-6">Fun & Games</h2>
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!quest [difficulty]</kbd></h3>
-                        <p class="text-gray-600">Embark on a solo RPG quest. Difficulty can be <kbd>easy</kbd>, <kbd>normal</kbd>, or <kbd>hard</kbd>.</p>
+                <div class="space-y-4">
+                     <div class="command-group bg-white rounded-lg shadow overflow-hidden">
+                        <div class="command-card-header p-6 flex justify-between items-center" onclick="toggleDetails(this)">
+                             <div>
+                                <h3 class="font-bold text-xl mb-1"><kbd>!quest</kbd></h3>
+                                <p class="text-gray-600">Embark on a solo RPG quest to fight monsters and level up.</p>
+                            </div>
+                            <svg class="chevron w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </div>
+                        <div class="details-panel">
+                            <div class="p-6 border-t border-gray-200 space-y-4">
+                                <p><kbd>!quest [difficulty]</kbd> - Difficulty can be <kbd>easy</kbd>, <kbd>normal</kbd>, or <kbd>hard</kbd>.</p>
+                                <p><kbd>!quest profile [user]</kbd> - View a player's Quest profile (Level, XP, Class).</p>
+                            </div>
+                        </div>
                     </div>
-                     <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!quest profile [user]</kbd></h3>
-                        <p class="text-gray-600">View your or another player's Quest profile (Level, XP, Class).</p>
+                    <div class="command-group bg-white rounded-lg shadow overflow-hidden">
+                        <div class="command-card-header p-6 flex justify-between items-center" onclick="toggleDetails(this)">
+                             <div>
+                                <h3 class="font-bold text-xl mb-1"><kbd>!hunt / !hug</kbd></h3>
+                                <p class="text-gray-600">Interact with creatures that randomly appear in the channel.</p>
+                            </div>
+                            <svg class="chevron w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </div>
+                        <div class="details-panel">
+                            <div class="p-6 border-t border-gray-200 space-y-4">
+                                <p><kbd>!hunt</kbd> or <kbd>!hug</kbd> - Captures or befriends the current animal.</p>
+                                <p><kbd>!hunt score [user]</kbd> - Displays hunting and hugging scores.</p>
+                                <p><kbd>!release &lt;hunt|hug&gt;</kbd> - Releases one of your previously captured animals.</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!hunt / !hug</kbd></h3>
-                        <p class="text-gray-600">Hunt or hug a creature that randomly appears in the channel.</p>
+                    <div class="command-group bg-white rounded-lg shadow overflow-hidden">
+                        <div class="command-card-header p-6 flex justify-between items-center" onclick="toggleDetails(this)">
+                             <div>
+                                <h3 class="font-bold text-xl mb-1"><kbd>!adventure</kbd></h3>
+                                <p class="text-gray-600">A choose-your-own-adventure game for the channel.</p>
+                            </div>
+                            <svg class="chevron w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </div>
+                        <div class="details-panel">
+                            <div class="p-6 border-t border-gray-200 space-y-4">
+                                <p><kbd>!adventure</kbd> - Starts a vote on a destination for the next adventure.</p>
+                                <p><kbd>!items [user]</kbd> - Shows peculiar items collected from adventures.</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!hunt score [user]</kbd></h3>
-                        <p class="text-gray-600">Displays your or another user's hunting and hugging scores.</p>
+                    <div class="command-group bg-white rounded-lg shadow overflow-hidden">
+                        <div class="command-card-header p-6 flex justify-between items-center" onclick="toggleDetails(this)">
+                             <div>
+                                <h3 class="font-bold text-xl mb-1"><kbd>!bell / !answer</kbd></h3>
+                                <p class="text-gray-600">A reaction game to answer the service bell.</p>
+                            </div>
+                            <svg class="chevron w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </div>
+                        <div class="details-panel">
+                            <div class="p-6 border-t border-gray-200 space-y-4">
+                                <p><kbd>!answer</kbd> - Answer the bell when it randomly rings to score points.</p>
+                                <p><kbd>!bell score</kbd> - Check how many times you've answered the bell.</p>
+                            </div>
+                        </div>
                     </div>
-                     <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!adventure</kbd></h3>
-                        <p class="text-gray-600">Starts a choose-your-own-adventure where the channel votes on the destination.</p>
-                    </div>
-                     <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!items [user]</kbd></h3>
-                        <p class="text-gray-600">Shows the peculiar items you or another user have collected from adventures.</p>
-                    </div>
-                     <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!answer</kbd></h3>
-                        <p class="text-gray-600">Answer the service bell when it randomly rings in the channel to score points.</p>
-                    </div>
-                     <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!bell score</kbd></h3>
-                        <p class="text-gray-600">Check how many times you've answered the service bell.</p>
-                    </div>
-                    <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!fortune [category]</kbd></h3>
+                     <div class="command-group bg-white rounded-lg shadow p-6">
+                        <h3 class="font-bold text-xl mb-1"><kbd>!fortune [category]</kbd></h3>
                         <p class="text-gray-600">Receive a fortune. Optional categories: <kbd>happy</kbd>, <kbd>sad</kbd>, <kbd>silly</kbd>, <kbd>spooky</kbd>.</p>
                     </div>
-                    <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!coffee</kbd></h3>
+                     <div class="command-group bg-white rounded-lg shadow p-6">
+                        <h3 class="font-bold text-xl mb-1"><kbd>!coffee</kbd></h3>
                         <p class="text-gray-600">Serves a beverage appropriate to your local time of day.</p>
                     </div>
-                    <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!calc &lt;expression&gt;</kbd></h3>
+                     <div class="command-group bg-white rounded-lg shadow p-6">
+                        <h3 class="font-bold text-xl mb-1"><kbd>!calc &lt;expression&gt;</kbd></h3>
                         <p class="text-gray-600">Performs a mathematical calculation (with occasional whimsical errors).</p>
                     </div>
-                     <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!pron</kbd></h3>
+                     <div class="command-group bg-white rounded-lg shadow p-6">
+                        <h3 class="font-bold text-xl mb-1"><kbd>!pron</kbd></h3>
                         <p class="text-gray-600">Provides a wholesome, helpful scenario with a suggestive trigger.</p>
                     </div>
                 </div>
@@ -208,53 +238,57 @@
             <!-- Utility & Information Commands -->
             <section class="mb-12 command-category">
                 <h2 class="text-3xl font-semibold border-b-2 border-indigo-500 pb-2 mb-6">Utility & Information</h2>
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!help [command]</kbd></h3>
+                 <div class="space-y-4">
+                     <div class="command-group bg-white rounded-lg shadow p-6">
+                        <h3 class="font-bold text-xl mb-1"><kbd>!help [command]</kbd></h3>
                         <p class="text-gray-600">Sends a private message with a list of commands, or details for a specific command.</p>
                     </div>
-                    <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!weather [location/user]</kbd></h3>
+                     <div class="command-group bg-white rounded-lg shadow p-6">
+                        <h3 class="font-bold text-xl mb-1"><kbd>!seen &lt;user&gt;</kbd></h3>
+                        <p class="text-gray-600">Reports when a user was last seen speaking in the current channel.</p>
+                    </div>
+                    <div class="command-group bg-white rounded-lg shadow p-6">
+                        <h3 class="font-bold text-xl mb-1"><kbd>!weather [location/user]</kbd></h3>
                         <p class="text-gray-600">Gets the weather for your set location, or a specified location/user.</p>
                     </div>
-                    <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!time [location/user]</kbd></h3>
+                    <div class="command-group bg-white rounded-lg shadow p-6">
+                        <h3 class="font-bold text-xl mb-1"><kbd>!time [location/user]</kbd></h3>
                         <p class="text-gray-600">Gets the local time for your set location, or a specified location/user.</p>
                     </div>
-                    <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!g &lt;query&gt;</kbd></h3>
+                     <div class="command-group bg-white rounded-lg shadow p-6">
+                        <h3 class="font-bold text-xl mb-1"><kbd>!g &lt;query&gt;</kbd></h3>
                         <p class="text-gray-600">Performs a Google search.</p>
                     </div>
-                    <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!yt &lt;query&gt;</kbd></h3>
+                     <div class="command-group bg-white rounded-lg shadow p-6">
+                        <h3 class="font-bold text-xl mb-1"><kbd>!yt &lt;query&gt;</kbd></h3>
                         <p class="text-gray-600">Searches YouTube for a video.</p>
                     </div>
-                    <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!ud &lt;term&gt;</kbd></h3>
+                     <div class="command-group bg-white rounded-lg shadow p-6">
+                        <h3 class="font-bold text-xl mb-1"><kbd>!ud &lt;term&gt;</kbd></h3>
                         <p class="text-gray-600">Looks up a term on Urban Dictionary.</p>
                     </div>
-                    <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!wiki &lt;query&gt;</kbd></h3>
+                    <div class="command-group bg-white rounded-lg shadow p-6">
+                        <h3 class="font-bold text-xl mb-1"><kbd>!wiki &lt;query&gt;</kbd></h3>
                         <p class="text-gray-600">Searches Wikipedia for an article.</p>
                     </div>
-                    <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!news</kbd></h3>
+                     <div class="command-group bg-white rounded-lg shadow p-6">
+                        <h3 class="font-bold text-xl mb-1"><kbd>!news</kbd></h3>
                         <p class="text-gray-600">Fetches the top news story for your set location.</p>
                     </div>
-                    <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!tr [lang] &lt;text&gt;</kbd></h3>
+                     <div class="command-group bg-white rounded-lg shadow p-6">
+                        <h3 class="font-bold text-xl mb-1"><kbd>!tr [lang] &lt;text&gt;</kbd></h3>
                         <p class="text-gray-600">Translates text. If no language code is given, it defaults to English.</p>
                     </div>
-                    <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!memo &lt;user&gt; &lt;message&gt;</kbd></h3>
-                        <p class="text-gray-600">Leaves a message for a user that will be delivered when they next speak.</p>
+                     <div class="command-group bg-white rounded-lg shadow p-6">
+                        <h3 class="font-bold text-xl mb-1"><kbd>!memo &lt;user&gt; &lt;message&gt;</kbd></h3>
+                        <p class="text-gray-600">Leaves a message for a user that will be delivered when they next speak in that channel.</p>
                     </div>
-                     <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!shorten &lt;url&gt;</kbd></h3>
+                     <div class="command-group bg-white rounded-lg shadow p-6">
+                        <h3 class="font-bold text-xl mb-1"><kbd>!shorten &lt;url&gt;</kbd></h3>
                         <p class="text-gray-600">Shortens a long URL.</p>
                     </div>
-                     <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2"><kbd>!gif &lt;query&gt;</kbd></h3>
+                     <div class="command-group bg-white rounded-lg shadow p-6">
+                        <h3 class="font-bold text-xl mb-1"><kbd>!gif &lt;query&gt;</kbd></h3>
                         <p class="text-gray-600">Finds a GIF on Giphy that matches the query.</p>
                     </div>
                 </div>
@@ -263,25 +297,25 @@
              <!-- Passive & Ambient Features -->
             <section class="mb-12 command-category">
                 <h2 class="text-3xl font-semibold border-b-2 border-indigo-500 pb-2 mb-6">Passive & Ambient Features</h2>
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2">Natural Language</h3>
+                <div class="space-y-4">
+                    <div class="command-group bg-white rounded-lg shadow p-6">
+                        <h3 class="font-bold text-xl mb-1">Natural Language</h3>
                         <p class="text-gray-600">Responds to natural questions like "Jeeves, what's the weather?" or "Jeeves, what is 2+2?". Also responds to flirtatious comments and greetings.</p>
                     </div>
-                    <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2">URL Title Announcer</h3>
+                    <div class="command-group bg-white rounded-lg shadow p-6">
+                        <h3 class="font-bold text-xl mb-1">URL Title Announcer</h3>
                         <p class="text-gray-600">Automatically fetches and announces the title of most URLs posted in the chat, including details for YouTube videos.</p>
                     </div>
-                    <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2">Sed Corrections</h3>
+                    <div class="command-group bg-white rounded-lg shadow p-6">
+                        <h3 class="font-bold text-xl mb-1">Sed Corrections</h3>
                         <p class="text-gray-600">Correct typos in your last message by using sed-style replacement: <kbd>s/mistake/correction/</kbd>.</p>
                     </div>
-                    <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2">Random Chatter</h3>
+                    <div class="command-group bg-white rounded-lg shadow p-6">
+                        <h3 class="font-bold text-xl mb-1">Random Chatter</h3>
                         <p class="text-gray-600">Periodically posts daily and weekly observations or comments based on channel conversation topics.</p>
                     </div>
-                     <div class="command-card bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl mb-2">Roadtrips</h3>
+                     <div class="command-group bg-white rounded-lg shadow p-6">
+                        <h3 class="font-bold text-xl mb-1">Roadtrips</h3>
                         <p class="text-gray-600">Will occasionally offer to take the channel on a spontaneous roadtrip, a mini-adventure where users can RSVP.</p>
                     </div>
                 </div>
@@ -291,6 +325,13 @@
     </div>
 
     <script>
+        function toggleDetails(headerElement) {
+            const detailsPanel = headerElement.nextElementSibling;
+            const chevron = headerElement.querySelector('.chevron');
+            detailsPanel.classList.toggle('open');
+            chevron.classList.toggle('open');
+        }
+
         function filterCommands() {
             const input = document.getElementById('searchInput');
             const filter = input.value.toUpperCase();
@@ -298,22 +339,32 @@
             const categories = container.getElementsByClassName('command-category');
 
             for (let i = 0; i < categories.length; i++) {
-                const cards = categories[i].getElementsByClassName('command-card');
-                let categoryVisible = false;
-                for (let j = 0; j < cards.length; j++) {
-                    const kbd = cards[j].getElementsByTagName("kbd")[0];
-                    const p = cards[j].getElementsByTagName("p")[0];
-                    if (kbd || p) {
-                        const txtValue = (kbd ? kbd.textContent || kbd.innerText : '') + ' ' + (p ? p.textContent || p.innerText : '');
-                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                            cards[j].style.display = "";
-                            categoryVisible = true;
-                        } else {
-                            cards[j].style.display = "none";
+                const groups = categories[i].getElementsByClassName('command-group');
+                let categoryHasVisibleGroup = false;
+
+                for (let j = 0; j < groups.length; j++) {
+                    const group = groups[j];
+                    const header = group.querySelector('.command-card-header');
+                    const details = group.querySelector('.details-panel');
+                    const textContent = group.textContent || group.innerText;
+
+                    if (textContent.toUpperCase().indexOf(filter) > -1) {
+                        group.style.display = "";
+                        categoryHasVisibleGroup = true;
+                        // If there's a search term, expand the details to show the match
+                        if (filter.length > 0 && details) {
+                            details.classList.add('open');
+                            if(header) header.querySelector('.chevron').classList.add('open');
+                        } else if (details) {
+                            details.classList.remove('open');
+                             if(header) header.querySelector('.chevron').classList.remove('open');
                         }
+                    } else {
+                        group.style.display = "none";
                     }
                 }
-                if (categoryVisible) {
+                
+                if (categoryHasVisibleGroup) {
                     categories[i].style.display = "";
                 } else {
                     categories[i].style.display = "none";
