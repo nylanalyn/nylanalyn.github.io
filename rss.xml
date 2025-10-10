@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>nylan.cat</title>
+        <link>https://nylan.cat</link>
+        <description>A pleasing site, for pleasing people</description>
+        <language>en-us</language>
+        <atom:link href="https://nylan.cat/rss.xml" rel="self" type="application/rss+xml" />
+
+        <item>
+            <title>Thoughts on AI</title>
+            <link>https://nylan.cat/posts/ai-thoughts.html</link>
+            <guid>https://nylan.cat/posts/ai-thoughts.html</guid>
+            <pubDate>Fri, 10 Oct 2025 00:00:00 GMT</pubDate>
+            <description>I am confused by the AI boom. Not so much by it existing, more by the fact that I am unsure how to feel about it.</description>
+        </item>
+
+        <item>
+            <title>Welcome to Electric Dreams</title>
+            <link>https://nylan.cat/posts/welcome-to-electric-dreams</link>
+            <guid>https://nylan.cat/posts/welcome-to-electric-dreams</guid>
+            <pubDate>Wed, 08 Oct 2025 00:00:00 GMT</pubDate>
+            <description>I've redesigned the site with a new Electric Dreams theme. Dark backgrounds, neon colors, and a whole lot of vibes.</description>
+        </item>
+
+        <item>
+            <title>Nostalgia</title>
+            <link>https://nylan.cat/posts/nostalgia</link>
+            <guid>https://nylan.cat/posts/nostalgia</guid>
+            <pubDate>Wed, 08 Oct 2025 00:00:00 GMT</pubDate>
+            <description>There's something to be said for nostalgia. I remember late nights, sat at my computer. The warm glow of the monitor, the gentle hum of the fans.</description>
+        </item>
+
+    </channel>
+</rss>
