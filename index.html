@@ -94,7 +94,25 @@
 
         <footer>
             <p>&copy; 2025 nylan.cat | Powered by <a href="/electric-dreams-theme">Electric Dreams</a></p>
+            <span class="white-rabbit" id="whiteRabbit" title="Follow the white rabbit...">🐇</span>
         </footer>
     </div>
+
+    <!-- Terminal Overlay -->
+    <div class="terminal-overlay" id="terminalOverlay">
+        <div class="terminal-screen">
+            <div class="terminal-header">
+                <span class="terminal-title">ELECTRIC_DREAMS.EXE</span>
+                <button class="terminal-close" id="terminalClose">×</button>
+            </div>
+            <div class="terminal-content" id="terminalContent"></div>
+            <div class="terminal-input-line">
+                <span class="terminal-prompt">&gt;</span>
+                <input type="text" class="terminal-input" id="terminalInput" autocomplete="off" spellcheck="false">
+            </div>
+        </div>
+    </div>
+
+    <script src="adventure.js"></script>
 </body>
 </html>
