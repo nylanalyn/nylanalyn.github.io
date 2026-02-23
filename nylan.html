@@ -14,7 +14,8 @@
             /* We want the crayon drawing to stand out but still fit the eerie vibe 
                so maybe a bit of filter, but preserve its coloring a little. */
             filter: contrast(1.1) brightness(0.9) saturate(0.8) sepia(0.2);
-            border-radius: 10px; /* Slight rounding for paper */
+            border-radius: 10px;
+            /* Slight rounding for paper */
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.9), 0 0 50px rgba(25, 40, 20, 0.4);
             animation: slow-float 15s ease-in-out infinite, fade-in-entity 4s ease-out forwards;
             width: 300px;
@@ -24,6 +25,7 @@
             display: block;
             margin: 0 auto;
         }
+
         .nylan-photo:hover {
             filter: contrast(1.3) brightness(1.1) saturate(1.2);
         }
@@ -33,26 +35,30 @@
 <body>
     <div class="container h-card">
         <!-- Hidden elements for microformats -->
-        <a class="u-url" href="https://nylanalyn.github.io/nylan.html" style="display:none;">Profile</a>
+        <a class="u-url u-uid" rel="me" href="https://nylan.cat/nylan.html" style="display:none;">Profile</a>
 
         <div class="entity-wrapper">
             <!-- This image needs to be copied into the images/ folder! -->
-            <img src="images/crayon_cat_head.png" alt="Nylan's True Crayon Form" class="u-photo nylan-photo">
+            <img src="images/nylan-picture.png" alt="Nylan's True Crayon Form" class="u-photo nylan-photo">
         </div>
 
         <div class="text-content">
-            <h1 class="p-name" style="font-size: 2.5rem; margin-bottom: 0.5rem; text-shadow: 0 2px 5px rgba(0,0,0,1);">Nylan</h1>
-            <h2 class="p-nickname" style="font-size: 1.2rem; opacity: 0.6; margin-top: 0; font-style: italic;">Nyanlathotep</h2>
-            
+            <h1 class="p-name" style="font-size: 2.5rem; margin-bottom: 0.5rem; text-shadow: 0 2px 5px rgba(0,0,0,1);">
+                Nylan</h1>
+            <h2 class="p-nickname" style="font-size: 1.2rem; opacity: 0.6; margin-top: 0; font-style: italic;">
+                Nyanlathotep</h2>
+
             <div class="p-note">
                 <p class="fade-in-slow delay-1">My true form inspires madness.</p>
                 <p class="fade-in-slow delay-2">Your mind protects itself.</p>
                 <p class="fade-in-slow delay-3">You see only the crayons.</p>
                 <p class="fade-in-slow delay-4">It is better this way.</p>
             </div>
-            
+
             <p class="fade-in-slow delay-4" style="margin-top: 4rem; font-size: 1.2rem;">
-                <a href="index.html" style="color: var(--accent-color); text-decoration: none; border-bottom: 1px solid var(--accent-color); padding-bottom: 2px;">Return to the rot</a>
+                <a href="index.html"
+                    style="color: var(--accent-color); text-decoration: none; border-bottom: 1px solid var(--accent-color); padding-bottom: 2px;">Return
+                    to the rot</a>
             </p>
         </div>
     </div>
