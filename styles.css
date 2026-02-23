@@ -1,0 +1,90 @@
+:root {
+    --text-color: #e4dcd3;
+    --accent-color: #7b8e6b;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #1a2419;
+    background-image: url('images/bg.png');
+    background-repeat: repeat;
+    background-attachment: fixed;
+    background-size: 300px;
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--text-color);
+    overflow: hidden;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+    background: radial-gradient(circle, rgba(26, 36, 25, 0.6) 0%, rgba(26, 36, 25, 0.95) 100%);
+    box-sizing: border-box;
+    padding: 2rem;
+}
+
+.entity-wrapper {
+    margin-bottom: 3rem;
+    animation: slow-float 12s ease-in-out infinite;
+}
+
+.entity {
+    width: 250px;
+    height: auto;
+    border-radius: 50%;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.8), 0 0 100px rgba(35, 50, 30, 0.5);
+    opacity: 0;
+    animation: fade-in-entity 5s ease-out forwards 1s;
+    transition: filter 2s ease;
+    filter: sepia(0.4) brightness(0.7) contrast(1.1);
+}
+
+.entity:hover {
+    filter: sepia(0.6) brightness(0.5) contrast(1.2);
+}
+
+.text-content {
+    text-align: center;
+    max-width: 600px;
+}
+
+.text-content p {
+    font-size: 1.5rem;
+    font-weight: 300;
+    letter-spacing: 2px;
+    margin: 1.5rem 0;
+    opacity: 0;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+}
+
+@keyframes slow-float {
+    0% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-15px) rotate(2deg); }
+    100% { transform: translateY(0px) rotate(0deg); }
+}
+
+@keyframes fade-in-entity {
+    0% { opacity: 0; filter: blur(10px) sepia(0.4) brightness(0.7); }
+    100% { opacity: 0.85; filter: blur(0px) sepia(0.4) brightness(0.7); }
+}
+
+@keyframes text-fade-in {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 0.7; transform: translateY(0); }
+}
+
+.fade-in-slow {
+    animation: text-fade-in 4s ease-out forwards;
+}
+
+.delay-1 { animation-delay: 3s; }
+.delay-2 { animation-delay: 8s; }
+.delay-3 { animation-delay: 13s; }
+.delay-4 { animation-delay: 18s; }
