@@ -1,15 +1,15 @@
 :root {
     color-scheme: light dark;
-    --background: #fff;
-    --foreground: #000;
-    --shimmer: #777;
+    --background: #f4f2ed;
+    --foreground: #242422;
+    --shimmer: #777771;
 }
 
 @media (prefers-color-scheme: dark) {
     :root {
-        --background: #000;
-        --foreground: #fff;
-        --shimmer: #aaa;
+        --background: #171716;
+        --foreground: #e8e6e1;
+        --shimmer: #fff;
     }
 }
 
@@ -19,6 +19,7 @@ html {
 
 body {
     margin: 0;
+    min-height: 100vh;
     min-height: 100svh;
     display: grid;
     place-items: center;
@@ -29,10 +30,12 @@ body {
 
 .wordmark {
     margin: 0;
-    font-size: clamp(3rem, 10vw, 7rem);
-    font-weight: 500;
-    letter-spacing: 0.06em;
+    padding-inline-start: 0.08em;
+    font-size: clamp(4rem, 13vw, 9rem);
+    font-weight: 600;
+    letter-spacing: 0.08em;
     line-height: 1;
+    user-select: none;
 }
 
 @supports ((background-clip: text) or (-webkit-background-clip: text)) {
@@ -45,8 +48,9 @@ body {
             var(--foreground) 58%,
             var(--foreground) 100%
         );
-        background-size: 250% 100%;
+        background-size: 300% 100%;
         background-position: 100% 0;
+        background-repeat: no-repeat;
         background-clip: text;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -57,7 +61,7 @@ body {
             background-position: 100% 0;
         }
         to {
-            background-position: -50% 0;
+            background-position: 0 0;
         }
     }
 }
@@ -65,7 +69,7 @@ body {
 @media (hover: hover) and (pointer: fine) {
     @supports ((background-clip: text) or (-webkit-background-clip: text)) {
         .wordmark:hover {
-            animation: shimmer 700ms ease-out 1;
+            animation: shimmer 850ms ease-in-out 1;
         }
     }
 }
